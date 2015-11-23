@@ -20,6 +20,29 @@ $ composer require php-http/react-adapter
 
 ## Usage
 
+The `ReactHttpAdapter` class need a [message factory](https://github.com/php-http/message-factory) in order to work:
+
+```php
+$client = new Http\Adapter\ReactHttpAdapter($messageFactory);
+```
+
+For more control, it can also be configured with a specific `React\EventLoop\LoopInterface` and / or a specific `React\HttpClient\Client`:
+
+```php
+$loop = Http\Adapter\ReactFactory::buildEventLoop();
+$client = new Http\Adapter\ReactHttpAdapter($messageFactory, $loop);
+
+//or
+
+$reactClient = Http\Adapter\ReactFactory::buildHttpClient($loop);
+$client = new Http\Adapter\ReactHttpAdapter(
+    $messageFactory,
+    $loop,
+    $reactClient
+);
+```
+
+If you don't want to use the `Http\Adapter\ReactFactory` to build instances you must rely on React documentation on Github: https://github.com/reactphp/http-client#example
 
 ## Testing
 
