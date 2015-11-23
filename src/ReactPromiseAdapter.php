@@ -5,6 +5,7 @@ namespace Http\Adapter;
 use React\EventLoop\LoopInterface;
 use React\Promise\PromiseInterface as ReactPromise;
 use Http\Client\Promise;
+use Http\Client\Exception;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -54,7 +55,7 @@ class ReactPromiseAdapter implements Promise
                 $this->state = Promise::FULFILLED;
                 $this->response = $response;
             },
-            function(\Exception $error) {
+            function(Exception $error) {
                 $this->state = Promise::REJECTED;
                 $this->exception = $error;
             }
