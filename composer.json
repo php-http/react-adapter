@@ -14,9 +14,12 @@
         "php": ">=5.4",
         "php-http/httplug": "^1.0.0-alpha2",
         "php-http/message-factory": "^0.4@dev",
-        "react/http-client": "^0.4"
+        "react/http-client": "^0.4.8",
+        "react/dns": "^0.4.1",
+        "react/stream": "^0.4.3"
     },
     "require-dev": {
+        "guzzlehttp/psr7": "^1.0",
         "php-http/adapter-integration-tests": "dev-master"
     },
     "autoload": {
