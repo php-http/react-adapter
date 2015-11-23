@@ -1,0 +1,47 @@
+{
+    "name": "php-http/react-adapter",
+    "description": "React adapter for PHP-HTTP",
+    "license": "MIT",
+    "keywords": ["http", "react", "httplug"],
+    "homepage": "http://php-http.org",
+    "authors": [
+        {
+            "name": "Stéphane HULARD",
+            "email": "s.hulard@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "php-http/httplug": "^1.0",
+        "php-http/message-factory": "^0.3",
+        "react/http-client": "^0.4"
+    },
+    "require-dev": {
+        "php-http/adapter-integration-tests": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Http\\Adapter\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Http\\Adapter\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        }
+    },
+    "provide": {
+        "php-http/client-implementation": "1.0",
+        "php-http/async-client-implementation": "1.0"
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-ci": "vendor/bin/phpunit --coverage-clover build/coverage.xml"
+    },
+    "prefer-stable": true,
+    "minimum-stability": "dev"
+}
