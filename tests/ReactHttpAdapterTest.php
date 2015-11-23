@@ -2,11 +2,12 @@
 
 namespace Http\Adapter\Tests;
 
+use Http\Discovery\MessageFactory;
 use Http\Client\Tests\HttpClientTest;
-use Http\Adapter\ReactHttpClient;
+use Http\Adapter\ReactHttpAdapter;
 
 /**
- * @author Stéphane Hulard <s.hulard@gmail.com>
+ * @author Stéphane Hulard <stephane@hlrd.me>
  */
 class ReactHttpClientTest extends HttpClientTest
 {
@@ -15,7 +16,7 @@ class ReactHttpClientTest extends HttpClientTest
      */
     protected function createHttpAdapter()
     {
-        $messageFactory = new \Http\Discovery\MessageFactory\GuzzleFactory();
-        return new ReactHttpClient($messageFactory);
+        $messageFactory = new MessageFactory\GuzzleFactory();
+        return new ReactHttpAdapter($messageFactory);
     }
 }

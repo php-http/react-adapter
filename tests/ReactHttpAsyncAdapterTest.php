@@ -3,10 +3,10 @@
 namespace Http\Adapter\Tests;
 
 use Http\Client\Tests\HttpAsyncClientTest;
-use Http\Adapter\ReactHttpClient;
+use Http\Adapter\ReactHttpAdapter;
 
 /**
- * @author Stéphane Hulard <s.hulard@gmail.com>
+ * @author Stéphane Hulard <stephane@hlrd.me>
  */
 class ReactHttpAsyncClientTest extends HttpAsyncClientTest
 {
@@ -16,9 +16,6 @@ class ReactHttpAsyncClientTest extends HttpAsyncClientTest
     protected function createHttpAsyncClient()
     {
         $messageFactory = new \Http\Discovery\MessageFactory\GuzzleFactory();
-
-        return new ReactHttpClient(
-            $messageFactory
-        );
+        return new ReactHttpAdapter($messageFactory);
     }
 }

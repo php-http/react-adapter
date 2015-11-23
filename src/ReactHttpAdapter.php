@@ -22,7 +22,7 @@ use Psr\Http\Message\StreamInterface;
  * Client for the React promise implementation
  * @author Stéphane Hulard <stephane@hlrd.me>
  */
-class ReactHttpClient implements HttpClient, HttpAsyncClient
+class ReactHttpAdapter implements HttpClient, HttpAsyncClient
 {
     /**
      * React HTTP client
