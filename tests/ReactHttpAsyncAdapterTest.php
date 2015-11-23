@@ -2,6 +2,7 @@
 
 namespace Http\Adapter\Tests;
 
+use Http\Discovery\MessageFactoryDiscovery;
 use Http\Client\Tests\HttpAsyncClientTest;
 use Http\Adapter\ReactHttpAdapter;
 
@@ -15,7 +16,7 @@ class ReactHttpAsyncClientTest extends HttpAsyncClientTest
      */
     protected function createHttpAsyncClient()
     {
-        $messageFactory = new \Http\Discovery\MessageFactory\GuzzleFactory();
+        $messageFactory = MessageFactoryDiscovery::find();
         return new ReactHttpAdapter($messageFactory);
     }
 }
