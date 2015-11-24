@@ -18,6 +18,13 @@ Via Composer
 $ composer require php-http/react-adapter
 ```
 
+## Features
+
+This lib adapt ReactPHP behaviour to use the [PSR7 interfaces](https://github.com/php-fig/http-message).
+Also `sync` and `async` requests are possible without more code than a function call.
+
+For a deeper `async` comprehension, you must check how ReactPHP engine work.
+
 ## Usage
 
 The `ReactHttpAdapter` class need a [message factory](https://github.com/php-http/message-factory) in order to work:
@@ -46,10 +53,17 @@ If you don't want to use the `Http\Adapter\ReactFactory` to build instances you 
 
 ## Testing
 
+First launch the http server:
+
+```bash
+$ ./vendor/bin/http_test_server > /dev/null 2>&1 &
+```
+
+Then the test suite:
+
 ``` bash
 $ composer test
 ```
-
 
 ## Contributing
 
