@@ -126,6 +126,8 @@ class ReactPromiseAdapter implements Promise
         if( null === $this->loop ) {
             throw new \LogicException("You must set the loop before wait!");
         }
-        $this->loop->run();
+        while( Promise::PENDING === $this->getState() ) {
+            $this->loop->tick();
+        }
     }
 }
