@@ -48,7 +48,7 @@ class ReactFactory
         LoopInterface $loop,
         DnsResolver $dns = null
     ) {
-        if( null === $dns ) {
+        if (null === $dns) {
             $dns = self::buildDnsResolver($loop);
         }
 

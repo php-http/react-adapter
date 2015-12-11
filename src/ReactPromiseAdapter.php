@@ -51,11 +51,11 @@ class ReactPromiseAdapter implements Promise
     public function __construct(ReactPromise $promise)
     {
         $promise->then(
-            function(ResponseInterface $response) {
+            function (ResponseInterface $response) {
                 $this->state = Promise::FULFILLED;
                 $this->response = $response;
             },
-            function(Exception $error) {
+            function (Exception $error) {
                 $this->state = Promise::REJECTED;
                 $this->exception = $error;
             }
@@ -71,12 +71,12 @@ class ReactPromiseAdapter implements Promise
      */
     public function then(callable $onFulfilled = null, callable $onRejected = null)
     {
-        $this->promise->then(function() use ($onFulfilled) {
-            if( null !== $onFulfilled ) {
+        $this->promise->then(function () use ($onFulfilled) {
+            if (null !== $onFulfilled) {
                 call_user_func($onFulfilled, $this->response);
             }
-        }, function() use ($onRejected) {
-            if( null !== $onRejected ) {
+        }, function () use ($onRejected) {
+            if (null !== $onRejected) {
                 call_user_func($onRejected, $this->exception);
             }
         });
@@ -123,10 +123,10 @@ class ReactPromiseAdapter implements Promise
      */
     public function wait()
     {
-        if( null === $this->loop ) {
+        if (null === $this->loop) {
             throw new \LogicException("You must set the loop before wait!");
         }
-        while( Promise::PENDING === $this->getState() ) {
+        while (Promise::PENDING === $this->getState()) {
             $this->loop->tick();
         }
     }

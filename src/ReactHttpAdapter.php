@@ -7,14 +7,12 @@ use React\Promise\Deferred;
 use React\HttpClient\Client;
 use React\HttpClient\Request as ReactRequest;
 use React\HttpClient\Response as ReactResponse;
-
 use Http\Client\HttpClient;
 use Http\Client\HttpAsyncClient;
 use Http\Client\Promise;
 use Http\Client\Exception\HttpException;
 use Http\Client\Exception\RequestException;
 use Http\Message\MessageFactory;
-
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 
@@ -47,9 +45,9 @@ class ReactHttpAdapter implements HttpClient, HttpAsyncClient
         Client $client = null
     ) {
         $this->loop = null === $loop?ReactFactory::buildEventLoop():$loop;
-        if( null === $client ) {
+        if (null === $client) {
             $this->client = ReactFactory::buildHttpClient($this->loop);
-        } elseif( null === $loop ) {
+        } elseif (null === $loop) {
             throw new \RuntimeException(
                 "You must give a LoopInterface instance with the Client"
             );
@@ -81,30 +79,30 @@ class ReactHttpAdapter implements HttpClient, HttpAsyncClient
         $requestStream = $this->buildReactRequest($request);
         $deferred = new Deferred();
 
-        $requestStream->on('error', function(\Exception $error) use ($deferred, $request) {
+        $requestStream->on('error', function (\Exception $error) use ($deferred, $request) {
             $deferred->reject(new RequestException(
                 $error->getMessage(),
                 $request,
                 $error
             ));
         });
-        $requestStream->on('response', function(ReactResponse $response = null) use ($deferred, $requestStream, $request) {
+        $requestStream->on('response', function (ReactResponse $response = null) use ($deferred, $requestStream, $request) {
             $bodyStream = null;
-            $response->on('data', function($data) use (&$bodyStream) {
-                if( $data instanceof StreamInterface ) {
+            $response->on('data', function ($data) use (&$bodyStream) {
+                if ($data instanceof StreamInterface) {
                     $bodyStream = $data;
                 } else {
                     $bodyStream->write($data);
                 }
             });
 
-            $response->on('end', function(\Exception $error = null) use ($deferred, $request, $response, &$bodyStream) {
+            $response->on('end', function (\Exception $error = null) use ($deferred, $request, $response, &$bodyStream) {
                 $bodyStream->rewind();
                 $psr7Response = $this->messageFactory->buildResponse(
                     $response,
                     $bodyStream
                 );
-                if( null !== $error ) {
+                if (null !== $error) {
                     $deferred->reject(new HttpException(
                         $error->getMessage(),
                         $request,
@@ -132,10 +130,10 @@ class ReactHttpAdapter implements HttpClient, HttpAsyncClient
     private function buildReactRequest(RequestInterface $request)
     {
         $headers = [];
-        foreach( $request->getHeaders() as $name => $value ) {
+        foreach ($request->getHeaders() as $name => $value) {
             $headers[$name] = (is_array($value)?$value[0]:$value);
         }
-        if( $request->getBody()->getSize() > 0 ) {
+        if ($request->getBody()->getSize() > 0) {
             $headers['Content-Length'] = $request->getBody()->getSize();
         }
 
