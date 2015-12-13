@@ -4,8 +4,8 @@ namespace Http\Adapter;
 
 use React\EventLoop\LoopInterface;
 use React\Promise\PromiseInterface as ReactPromise;
-use Http\Client\Promise;
 use Http\Client\Exception;
+use Http\Promise\Promise;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -92,22 +92,6 @@ class ReactPromiseAdapter implements Promise
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getResponse()
-    {
-        return $this->response;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getException()
-    {
-        return $this->exception;
-    }
-
-    /**
      * Set EventLoop used for synchronous processing
      * @param LoopInterface $loop
      * @return ReactPromiseAdapter
@@ -121,13 +105,21 @@ class ReactPromiseAdapter implements Promise
     /**
      * {@inheritdoc}
      */
-    public function wait()
+    public function wait($unwrap = true)
     {
         if (null === $this->loop) {
             throw new \LogicException("You must set the loop before wait!");
         }
         while (Promise::PENDING === $this->getState()) {
             $this->loop->tick();
+        }
+
+        if ($unwrap) {
+            if (Promise::REJECTED == $this->getState()) {
+                throw $this->exception;
+            }
+
+            return $this->response;
         }
     }
 }
