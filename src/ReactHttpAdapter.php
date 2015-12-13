@@ -9,9 +9,9 @@ use React\HttpClient\Request as ReactRequest;
 use React\HttpClient\Response as ReactResponse;
 use Http\Client\HttpClient;
 use Http\Client\HttpAsyncClient;
-use Http\Client\Promise;
 use Http\Client\Exception\HttpException;
 use Http\Client\Exception\RequestException;
+use Http\Promise\Promise;
 use Http\Message\MessageFactory;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
@@ -62,13 +62,8 @@ class ReactHttpAdapter implements HttpClient, HttpAsyncClient
     public function sendRequest(RequestInterface $request)
     {
         $promise = $this->sendAsyncRequest($request);
-        $promise->wait();
 
-        if ($promise->getState() == Promise::REJECTED) {
-            throw $promise->getException();
-        }
-
-        return $promise->getResponse();
+        return $promise->wait();
     }
 
     /**
