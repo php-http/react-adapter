@@ -9,7 +9,7 @@ use Http\Adapter\React\Client;
 /**
  * @author Stéphane Hulard <stephane@hlrd.me>
  */
-class HttpAsyncAdapterTest extends HttpAsyncClientTest
+class AsyncClientTest extends HttpAsyncClientTest
 {
     /**
      * @return HttpClient

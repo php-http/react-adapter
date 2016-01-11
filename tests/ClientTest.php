@@ -9,7 +9,7 @@ use Http\Adapter\React\Client;
 /**
  * @author Stéphane Hulard <stephane@hlrd.me>
  */
-class HttpAdapterTest extends HttpClientTest
+class ClientTest extends HttpClientTest
 {
     /**
      * @return HttpClient
