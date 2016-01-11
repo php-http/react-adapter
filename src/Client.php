@@ -35,6 +35,12 @@ class Client implements HttpClient, HttpAsyncClient
     private $loop;
 
     /**
+     * HttpPlug message factory
+     * @var MessageFactory
+     */
+    private $messageFactory;
+
+    /**
      * Initialize the React client
      * @param LoopInterface|null $loop     React Event loop
      * @param Resolver           $resolver React async DNS resolver
@@ -54,7 +60,7 @@ class Client implements HttpClient, HttpAsyncClient
             );
         }
 
-        $this->messageFactory = new ReactMessageFactory($messageFactory);
+        $this->messageFactory = $messageFactory;
     }
 
     /**
@@ -94,7 +100,7 @@ class Client implements HttpClient, HttpAsyncClient
 
             $response->on('end', function (\Exception $error = null) use ($deferred, $request, $response, &$bodyStream) {
                 $bodyStream->rewind();
-                $psr7Response = $this->messageFactory->buildResponse(
+                $psr7Response = $this->buildResponse(
                     $response,
                     $bodyStream
                 );
@@ -141,5 +147,24 @@ class Client implements HttpClient, HttpAsyncClient
         );
 
         return $reactRequest;
+    }
+
+    /**
+     * Transform a React Response to a valid PSR7 ResponseInterface instance
+     * @param  ReactResponse $response
+     * @return ResponseInterface
+     */
+    private function buildResponse(
+        ReactResponse $response,
+        StreamInterface $body
+    ) {
+        $body->rewind();
+        return $this->messageFactory->createResponse(
+            $response->getCode(),
+            $response->getReasonPhrase(),
+            $response->getHeaders(),
+            $body,
+            $response->getVersion()
+        );
     }
 }
