@@ -1,10 +1,10 @@
 <?php
 
-namespace Http\Adapter;
+namespace Http\Adapter\React;
 
 use React\EventLoop\LoopInterface;
 use React\Promise\Deferred;
-use React\HttpClient\Client;
+use React\HttpClient\Client as ReactClient;
 use React\HttpClient\Request as ReactRequest;
 use React\HttpClient\Response as ReactResponse;
 use Http\Client\HttpClient;
@@ -20,7 +20,7 @@ use Psr\Http\Message\StreamInterface;
  * Client for the React promise implementation
  * @author Stéphane Hulard <stephane@hlrd.me>
  */
-class ReactHttpAdapter implements HttpClient, HttpAsyncClient
+class Client implements HttpClient, HttpAsyncClient
 {
     /**
      * React HTTP client
@@ -38,11 +38,12 @@ class ReactHttpAdapter implements HttpClient, HttpAsyncClient
      * Initialize the React client
      * @param LoopInterface|null $loop     React Event loop
      * @param Resolver           $resolver React async DNS resolver
+     * @param ReactClient        $client   React client to use
      */
     public function __construct(
         MessageFactory $messageFactory,
         LoopInterface $loop = null,
-        Client $client = null
+        ReactClient $client = null
     ) {
         $this->loop = null === $loop?ReactFactory::buildEventLoop():$loop;
         if (null === $client) {

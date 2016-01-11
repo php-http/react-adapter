@@ -1,15 +1,15 @@
 <?php
 
-namespace Http\Adapter\Tests;
+namespace Http\Adapter\React\Tests;
 
 use Http\Discovery\MessageFactoryDiscovery;
 use Http\Client\Tests\HttpClientTest;
-use Http\Adapter\ReactHttpAdapter;
+use Http\Adapter\React\Client;
 
 /**
  * @author Stéphane Hulard <stephane@hlrd.me>
  */
-class ReactHttpClientTest extends HttpClientTest
+class HttpAdapterTest extends HttpClientTest
 {
     /**
      * @return HttpClient
@@ -17,6 +17,6 @@ class ReactHttpClientTest extends HttpClientTest
     protected function createHttpAdapter()
     {
         $messageFactory = MessageFactoryDiscovery::find();
-        return new ReactHttpAdapter($messageFactory);
+        return new Client($messageFactory);
     }
 }

@@ -1,15 +1,15 @@
 <?php
 
-namespace Http\Adapter\Tests;
+namespace Http\Adapter\React\Tests;
 
 use Http\Discovery\MessageFactoryDiscovery;
 use Http\Client\Tests\HttpAsyncClientTest;
-use Http\Adapter\ReactHttpAdapter;
+use Http\Adapter\React\Client;
 
 /**
  * @author Stéphane Hulard <stephane@hlrd.me>
  */
-class ReactHttpAsyncClientTest extends HttpAsyncClientTest
+class HttpAsyncAdapterTest extends HttpAsyncClientTest
 {
     /**
      * @return HttpClient
@@ -17,6 +17,6 @@ class ReactHttpAsyncClientTest extends HttpAsyncClientTest
     protected function createHttpAsyncClient()
     {
         $messageFactory = MessageFactoryDiscovery::find();
-        return new ReactHttpAdapter($messageFactory);
+        return new Client($messageFactory);
     }
 }

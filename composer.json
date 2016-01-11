@@ -12,8 +12,7 @@
     ],
     "require": {
         "php": ">=5.4",
-        "php-http/httplug": "1.0.0-alpha3",
-        "php-http/message-factory": "^0.4@dev",
+        "php-http/client-common": "^0.1.1",
         "react/http-client": "^0.4.8",
         "react/dns": "^0.4.1",
         "react/stream": "^0.4.3"
@@ -24,12 +23,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Http\\Adapter\\": "src/"
+            "Http\\Adapter\\React\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Http\\Adapter\\Tests\\": "tests/"
+            "Http\\Adapter\\React\\Tests\\": "tests/"
         }
     },
     "extra": {

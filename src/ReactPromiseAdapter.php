@@ -1,6 +1,6 @@
 <?php
 
-namespace Http\Adapter;
+namespace Http\Adapter\React;
 
 use React\EventLoop\LoopInterface;
 use React\Promise\PromiseInterface as ReactPromise;
