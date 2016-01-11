@@ -5,58 +5,65 @@ namespace Http\Adapter\React;
 use React\EventLoop\LoopInterface;
 use React\Promise\PromiseInterface as ReactPromise;
 use Http\Client\Exception;
-use Http\Promise\Promise;
+use Http\Promise\Promise as HttpPromise;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * React promise adapter implementation
+ * React promise adapter implementation.
+ *
  * @author Stéphane Hulard <stephane@hlrd.me>
  */
-class ReactPromiseAdapter implements Promise
+class Promise implements HttpPromise
 {
     /**
-     * Promise status
+     * Promise status.
+     *
      * @var string
      */
-    private $state = Promise::PENDING;
+    private $state = HttpPromise::PENDING;
 
     /**
-     * Adapted React promise
+     * Adapted React promise.
+     *
      * @var ReactPromise
      */
     private $promise;
 
     /**
-     * PSR7 received response
+     * PSR7 received response.
+     *
      * @var ResponseInterface
      */
     private $response;
 
     /**
-     * Execution error
+     * Execution error.
+     *
      * @var Exception
      */
     private $exception;
 
     /**
-     * React Event Loop used for synchronous processing
+     * React Event Loop used for synchronous processing.
+     *
      * @var LoopInterface
      */
     private $loop;
 
     /**
-     * Initialize the promise
+     * Initialize the promise.
+     *
      * @param ReactPromise $promise
      */
     public function __construct(ReactPromise $promise)
     {
         $promise->then(
             function (ResponseInterface $response) {
-                $this->state = Promise::FULFILLED;
+                $this->state = HttpPromise::FULFILLED;
                 $this->response = $response;
             },
             function (Exception $error) {
-                $this->state = Promise::REJECTED;
+                $this->state = HttpPromise::REJECTED;
                 $this->exception = $error;
             }
         );
@@ -64,9 +71,11 @@ class ReactPromiseAdapter implements Promise
     }
 
     /**
-     * Allow to apply callable when the promise resolve
-     * @param  callable|null $onFulfilled
-     * @param  callable|null $onRejected
+     * Allow to apply callable when the promise resolve.
+     *
+     * @param callable|null $onFulfilled
+     * @param callable|null $onRejected
+     *
      * @return ReactPromiseAdapter
      */
     public function then(callable $onFulfilled = null, callable $onRejected = null)
@@ -80,6 +89,7 @@ class ReactPromiseAdapter implements Promise
                 call_user_func($onRejected, $this->exception);
             }
         });
+
         return $this;
     }
 
@@ -92,13 +102,16 @@ class ReactPromiseAdapter implements Promise
     }
 
     /**
-     * Set EventLoop used for synchronous processing
+     * Set EventLoop used for synchronous processing.
+     *
      * @param LoopInterface $loop
+     *
      * @return ReactPromiseAdapter
      */
     public function setLoop(LoopInterface $loop)
     {
         $this->loop = $loop;
+
         return $this;
     }
 
@@ -108,14 +121,14 @@ class ReactPromiseAdapter implements Promise
     public function wait($unwrap = true)
     {
         if (null === $this->loop) {
-            throw new \LogicException("You must set the loop before wait!");
+            throw new \LogicException('You must set the loop before wait!');
         }
-        while (Promise::PENDING === $this->getState()) {
+        while (HttpPromise::PENDING === $this->getState()) {
             $this->loop->tick();
         }
 
         if ($unwrap) {
-            if (Promise::REJECTED == $this->getState()) {
+            if (HttpPromise::REJECTED == $this->getState()) {
                 throw $this->exception;
             }
 
