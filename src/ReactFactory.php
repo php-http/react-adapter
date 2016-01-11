@@ -10,13 +10,15 @@ use React\HttpClient\Factory as HttpClientFactory;
 use React\HttpClient\Client as HttpClient;
 
 /**
- * Factory wrapper for React instances
+ * Factory wrapper for React instances.
+ *
  * @author Stéphane Hulard <stephane@hlrd.me>
  */
 class ReactFactory
 {
     /**
-     * Build a react Event Loop
+     * Build a react Event Loop.
+     *
      * @return LoopInterface
      */
     public static function buildEventLoop()
@@ -25,9 +27,11 @@ class ReactFactory
     }
 
     /**
-     * Build a React Dns Resolver
-     * @param  LoopInterface $loop
-     * @param  string        $dns
+     * Build a React Dns Resolver.
+     *
+     * @param LoopInterface $loop
+     * @param string        $dns
+     *
      * @return DnsResolver
      */
     public static function buildDnsResolver(
@@ -35,13 +39,16 @@ class ReactFactory
         $dns = '8.8.8.8'
     ) {
         $factory = new DnsResolverFactory();
+
         return $factory->createCached($dns, $loop);
     }
 
     /**
-     * Build a React Http Client
-     * @param  LoopInterface $loop
-     * @param  Resolver      $dns
+     * Build a React Http Client.
+     *
+     * @param LoopInterface $loop
+     * @param Resolver      $dns
+     *
      * @return HttpClient
      */
     public static function buildHttpClient(
@@ -53,6 +60,7 @@ class ReactFactory
         }
 
         $factory = new HttpClientFactory();
+
         return $factory->create($loop, $dns);
     }
 }

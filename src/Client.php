@@ -11,37 +11,41 @@ use Http\Client\HttpClient;
 use Http\Client\HttpAsyncClient;
 use Http\Client\Exception\HttpException;
 use Http\Client\Exception\RequestException;
-use Http\Promise\Promise;
 use Http\Message\MessageFactory;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\StreamInterface;
 
 /**
- * Client for the React promise implementation
+ * Client for the React promise implementation.
+ *
  * @author Stéphane Hulard <stephane@hlrd.me>
  */
 class Client implements HttpClient, HttpAsyncClient
 {
     /**
-     * React HTTP client
+     * React HTTP client.
+     *
      * @var Client
      */
     private $client;
 
     /**
-     * React event loop
+     * React event loop.
+     *
      * @var LoopInterface
      */
     private $loop;
 
     /**
-     * HttpPlug message factory
+     * HttpPlug message factory.
+     *
      * @var MessageFactory
      */
     private $messageFactory;
 
     /**
-     * Initialize the React client
+     * Initialize the React client.
+     *
      * @param LoopInterface|null $loop     React Event loop
      * @param Resolver           $resolver React async DNS resolver
      * @param ReactClient        $client   React client to use
@@ -51,14 +55,13 @@ class Client implements HttpClient, HttpAsyncClient
         LoopInterface $loop = null,
         ReactClient $client = null
     ) {
-        $this->loop = null === $loop?ReactFactory::buildEventLoop():$loop;
-        if (null === $client) {
-            $this->client = ReactFactory::buildHttpClient($this->loop);
-        } elseif (null === $loop) {
+        if (null !== $client && null === $loop) {
             throw new \RuntimeException(
-                "You must give a LoopInterface instance with the Client"
+                'You must give a LoopInterface instance with the Client'
             );
         }
+        $this->loop = (null !== $loop) ?: ReactFactory::buildEventLoop();
+        $this->client = (null !== $client) ?: ReactFactory::buildHttpClient($this->loop);
 
         $this->messageFactory = $messageFactory;
     }
@@ -78,19 +81,19 @@ class Client implements HttpClient, HttpAsyncClient
      */
     public function sendAsyncRequest(RequestInterface $request)
     {
-        $requestStream = $this->buildReactRequest($request);
+        $reactRequest = $this->buildReactRequest($request);
         $deferred = new Deferred();
 
-        $requestStream->on('error', function (\Exception $error) use ($deferred, $request) {
+        $reactRequest->on('error', function (\Exception $error) use ($deferred, $request) {
             $deferred->reject(new RequestException(
                 $error->getMessage(),
                 $request,
                 $error
             ));
         });
-        $requestStream->on('response', function (ReactResponse $response = null) use ($deferred, $requestStream, $request) {
+        $reactRequest->on('response', function (ReactResponse $reactResponse = null) use ($deferred, $reactRequest, $request) {
             $bodyStream = null;
-            $response->on('data', function ($data) use (&$bodyStream) {
+            $reactResponse->on('data', function ($data) use (&$bodyStream) {
                 if ($data instanceof StreamInterface) {
                     $bodyStream = $data;
                 } else {
@@ -98,50 +101,50 @@ class Client implements HttpClient, HttpAsyncClient
                 }
             });
 
-            $response->on('end', function (\Exception $error = null) use ($deferred, $request, $response, &$bodyStream) {
+            $reactResponse->on('end', function (\Exception $error = null) use ($deferred, $request, $reactResponse, &$bodyStream) {
                 $bodyStream->rewind();
-                $psr7Response = $this->buildResponse(
-                    $response,
+                $response = $this->buildResponse(
+                    $reactResponse,
                     $bodyStream
                 );
                 if (null !== $error) {
                     $deferred->reject(new HttpException(
                         $error->getMessage(),
                         $request,
-                        $psr7Response,
+                        $response,
                         $error
                     ));
                 } else {
-                    $deferred->resolve($psr7Response);
+                    $deferred->resolve($response);
                 }
             });
         });
 
-        $requestStream->end((string)$request->getBody());
+        $reactRequest->end((string) $request->getBody());
 
-        $promise = new ReactPromiseAdapter($deferred->promise());
+        $promise = new Promise($deferred->promise());
         $promise->setLoop($this->loop);
+
         return $promise;
     }
 
     /**
-     * Build a React request from the PSR7 RequestInterface
-     * @param  RequestInterface $request
+     * Build a React request from the PSR7 RequestInterface.
+     *
+     * @param RequestInterface $request
+     *
      * @return ReactRequest
      */
     private function buildReactRequest(RequestInterface $request)
     {
         $headers = [];
         foreach ($request->getHeaders() as $name => $value) {
-            $headers[$name] = (is_array($value)?$value[0]:$value);
-        }
-        if ($request->getBody()->getSize() > 0) {
-            $headers['Content-Length'] = $request->getBody()->getSize();
+            $headers[$name] = (is_array($value) ? $value[0] : $value);
         }
 
         $reactRequest = $this->client->request(
             $request->getMethod(),
-            (string)$request->getUri(),
+            (string) $request->getUri(),
             $headers,
             $request->getProtocolVersion()
         );
@@ -150,8 +153,10 @@ class Client implements HttpClient, HttpAsyncClient
     }
 
     /**
-     * Transform a React Response to a valid PSR7 ResponseInterface instance
-     * @param  ReactResponse $response
+     * Transform a React Response to a valid PSR7 ResponseInterface instance.
+     *
+     * @param ReactResponse $response
+     *
      * @return ResponseInterface
      */
     private function buildResponse(
@@ -159,6 +164,7 @@ class Client implements HttpClient, HttpAsyncClient
         StreamInterface $body
     ) {
         $body->rewind();
+
         return $this->messageFactory->createResponse(
             $response->getCode(),
             $response->getReasonPhrase(),
