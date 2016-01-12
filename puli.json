@@ -1,0 +1,16 @@
+{
+    "version": "1.0",
+    "name": "php-http/react-adapter",
+    "bindings": {
+        "059ac065-ecb5-426c-959e-2f027a97bb59": {
+            "_class": "Puli\\Discovery\\Binding\\ClassBinding",
+            "class": "Http\\Adapter\\React\\Client",
+            "type": "Http\\Client\\HttpClient"
+        },
+        "dfb34752-b720-476b-9acc-e7f2f496fd1b": {
+            "_class": "Puli\\Discovery\\Binding\\ClassBinding",
+            "class": "Http\\Adapter\\React\\Client",
+            "type": "Http\\Client\\HttpAsyncClient"
+        }
+    }
+}
