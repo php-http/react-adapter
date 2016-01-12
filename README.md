@@ -27,29 +27,29 @@ For a deeper `async` comprehension, you must check how ReactPHP engine work.
 
 ## Usage
 
-The `ReactHttpAdapter` class need a [message factory](https://github.com/php-http/message-factory) in order to work:
+The `Client` class need a [message factory](https://github.com/php-http/message-factory) in order to work:
 
 ```php
-$client = new Http\Adapter\ReactHttpAdapter($messageFactory);
+$client = new Http\Adapter\React\Client($messageFactory);
 ```
 
 For more control, it can also be configured with a specific `React\EventLoop\LoopInterface` and / or a specific `React\HttpClient\Client`:
 
 ```php
-$loop = Http\Adapter\ReactFactory::buildEventLoop();
-$client = new Http\Adapter\ReactHttpAdapter($messageFactory, $loop);
+$loop = Http\Adapter\React\ReactFactory::buildEventLoop();
+$client = new Http\Adapter\React\Client($messageFactory, $loop);
 
 //or
 
-$reactClient = Http\Adapter\ReactFactory::buildHttpClient($loop);
-$client = new Http\Adapter\ReactHttpAdapter(
+$reactClient = Http\Adapter\React\ReactFactory::buildHttpClient($loop);
+$client = new Http\Adapter\React\Client(
     $messageFactory,
     $loop,
     $reactClient
 );
 ```
 
-If you don't want to use the `Http\Adapter\ReactFactory` to build instances you must rely on React documentation on Github: https://github.com/reactphp/http-client#example
+If you don't want to use the `Http\Adapter\React\ReactFactory` to build instances you must rely on React documentation on Github: https://github.com/reactphp/http-client#example
 
 ## Testing
 
