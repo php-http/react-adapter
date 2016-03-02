@@ -2,6 +2,7 @@
 
 namespace Http\Adapter\React\Tests;
 
+use Http\Client\HttpClient;
 use Http\Discovery\MessageFactoryDiscovery;
 use Http\Client\Tests\HttpAsyncClientTest;
 use Http\Adapter\React\Client;

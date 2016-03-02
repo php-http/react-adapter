@@ -2,9 +2,10 @@
 
 namespace Http\Adapter\React\Tests;
 
-use Http\Discovery\MessageFactoryDiscovery;
+use Http\Client\HttpClient;
 use Http\Client\Tests\HttpClientTest;
 use Http\Adapter\React\Client;
+use Http\Discovery\MessageFactoryDiscovery;
 
 /**
  * @author Stéphane Hulard <stephane@hlrd.me>

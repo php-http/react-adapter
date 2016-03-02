@@ -47,7 +47,7 @@ class ReactFactory
      * Build a React Http Client.
      *
      * @param LoopInterface $loop
-     * @param Resolver      $dns
+     * @param DnsResolver   $dns
      *
      * @return HttpClient
      */
