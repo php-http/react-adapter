@@ -2,6 +2,7 @@
 
 namespace Http\Adapter\React;
 
+use Http\Discovery\MessageFactoryDiscovery;
 use Psr\Http\Message\ResponseInterface;
 use React\EventLoop\LoopInterface;
 use React\Promise\Deferred;
@@ -38,7 +39,7 @@ class Client implements HttpClient, HttpAsyncClient
     private $loop;
 
     /**
-     * HttpPlug message factory.
+     * HTTPlug message factory.
      *
      * @var MessageFactory
      */
@@ -47,12 +48,12 @@ class Client implements HttpClient, HttpAsyncClient
     /**
      * Initialize the React client.
      *
-     * @param MessageFactory     $messageFactory
-     * @param LoopInterface|null $loop     React Event loop
-     * @param ReactClient        $client   React client to use
+     * @param MessageFactory|null $messageFactory
+     * @param LoopInterface|null  $loop     React Event loop
+     * @param ReactClient|null    $client   React client to use
      */
     public function __construct(
-        MessageFactory $messageFactory,
+        MessageFactory $messageFactory = null,
         LoopInterface $loop = null,
         ReactClient $client = null
     ) {
@@ -64,7 +65,7 @@ class Client implements HttpClient, HttpAsyncClient
         $this->loop = (null !== $loop) ?: ReactFactory::buildEventLoop();
         $this->client = (null !== $client) ?: ReactFactory::buildHttpClient($this->loop);
 
-        $this->messageFactory = $messageFactory;
+        $this->messageFactory = $messageFactory ?: MessageFactoryDiscovery::find();
     }
 
     /**

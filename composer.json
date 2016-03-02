@@ -15,7 +15,8 @@
         "php-http/httplug": "^1.0",
         "react/http-client": "^0.4.8",
         "react/dns": "^0.4.1",
-        "react/stream": "^0.4.3"
+        "react/stream": "^0.4.3",
+        "php-http/discovery": "^0.8"
     },
     "require-dev": {
         "php-http/adapter-integration-tests": "^0.4"
