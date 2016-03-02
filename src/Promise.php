@@ -76,7 +76,7 @@ class Promise implements HttpPromise
      * @param callable|null $onFulfilled
      * @param callable|null $onRejected
      *
-     * @return ReactPromiseAdapter
+     * @return Promise
      */
     public function then(callable $onFulfilled = null, callable $onRejected = null)
     {
@@ -106,7 +106,7 @@ class Promise implements HttpPromise
      *
      * @param LoopInterface $loop
      *
-     * @return ReactPromiseAdapter
+     * @return Promise
      */
     public function setLoop(LoopInterface $loop)
     {

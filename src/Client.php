@@ -2,6 +2,7 @@
 
 namespace Http\Adapter\React;
 
+use Psr\Http\Message\ResponseInterface;
 use React\EventLoop\LoopInterface;
 use React\Promise\Deferred;
 use React\HttpClient\Client as ReactClient;
@@ -46,8 +47,8 @@ class Client implements HttpClient, HttpAsyncClient
     /**
      * Initialize the React client.
      *
+     * @param MessageFactory     $messageFactory
      * @param LoopInterface|null $loop     React Event loop
-     * @param Resolver           $resolver React async DNS resolver
      * @param ReactClient        $client   React client to use
      */
     public function __construct(
