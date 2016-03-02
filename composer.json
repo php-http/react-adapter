@@ -18,9 +18,7 @@
         "react/stream": "^0.4.3"
     },
     "require-dev": {
-        "guzzlehttp/psr7": "^1.0",
-        "php-http/adapter-integration-tests": "^0.3.1",
-        "puli/composer-plugin": "1.0.0-beta9"
+        "php-http/adapter-integration-tests": "^0.4"
     },
     "autoload": {
         "psr-4": {
