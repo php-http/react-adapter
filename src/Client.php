@@ -62,8 +62,8 @@ class Client implements HttpClient, HttpAsyncClient
                 'You must give a LoopInterface instance with the Client'
             );
         }
-        $this->loop = (null !== $loop) ?: ReactFactory::buildEventLoop();
-        $this->client = (null !== $client) ?: ReactFactory::buildHttpClient($this->loop);
+        $this->loop = $loop ?: ReactFactory::buildEventLoop();
+        $this->client = $client ?: ReactFactory::buildHttpClient($this->loop);
 
         $this->messageFactory = $messageFactory ?: MessageFactoryDiscovery::find();
     }
