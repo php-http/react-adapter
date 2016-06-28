@@ -1,6 +1,13 @@
 # Change Log
 
 
+## 0.2.0 - 2016-06-28
+
+### Changed
+
+- Updated discovery dependency
+
+
 ## 0.1.1 - 2016-03-08
 
 ### Fixed
