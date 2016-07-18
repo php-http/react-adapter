@@ -2,20 +2,20 @@
 
 namespace Http\Adapter\React;
 
+use Http\Client\HttpClient;
+use Http\Client\HttpAsyncClient;
+use Http\Client\Exception\HttpException;
+use Http\Client\Exception\RequestException;
 use Http\Discovery\MessageFactoryDiscovery;
+use Http\Message\ResponseFactory;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
 use React\EventLoop\LoopInterface;
 use React\Promise\Deferred;
 use React\HttpClient\Client as ReactClient;
 use React\HttpClient\Request as ReactRequest;
 use React\HttpClient\Response as ReactResponse;
-use Http\Client\HttpClient;
-use Http\Client\HttpAsyncClient;
-use Http\Client\Exception\HttpException;
-use Http\Client\Exception\RequestException;
-use Http\Message\MessageFactory;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\StreamInterface;
 
 /**
  * Client for the React promise implementation.
@@ -39,21 +39,19 @@ class Client implements HttpClient, HttpAsyncClient
     private $loop;
 
     /**
-     * HTTPlug message factory.
-     *
-     * @var MessageFactory
+     * @var ResponseFactory
      */
-    private $messageFactory;
+    private $responseFactory;
 
     /**
      * Initialize the React client.
      *
-     * @param MessageFactory|null $messageFactory
-     * @param LoopInterface|null  $loop     React Event loop
-     * @param ReactClient|null    $client   React client to use
+     * @param ResponseFactory|null $responseFactory
+     * @param LoopInterface|null   $loop
+     * @param ReactClient|null     $client
      */
     public function __construct(
-        MessageFactory $messageFactory = null,
+        ResponseFactory $responseFactory = null,
         LoopInterface $loop = null,
         ReactClient $client = null
     ) {
@@ -62,10 +60,11 @@ class Client implements HttpClient, HttpAsyncClient
                 'You must give a LoopInterface instance with the Client'
             );
         }
+
         $this->loop = $loop ?: ReactFactory::buildEventLoop();
         $this->client = $client ?: ReactFactory::buildHttpClient($this->loop);
 
-        $this->messageFactory = $messageFactory ?: MessageFactoryDiscovery::find();
+        $this->responseFactory = $responseFactory ?: MessageFactoryDiscovery::find();
     }
 
     /**
@@ -93,6 +92,7 @@ class Client implements HttpClient, HttpAsyncClient
                 $error
             ));
         });
+
         $reactRequest->on('response', function (ReactResponse $reactResponse = null) use ($deferred, $reactRequest, $request) {
             $bodyStream = null;
             $reactResponse->on('data', function ($data) use (&$bodyStream) {
@@ -140,6 +140,7 @@ class Client implements HttpClient, HttpAsyncClient
     private function buildReactRequest(RequestInterface $request)
     {
         $headers = [];
+
         foreach ($request->getHeaders() as $name => $value) {
             $headers[$name] = (is_array($value) ? $value[0] : $value);
         }
@@ -167,7 +168,7 @@ class Client implements HttpClient, HttpAsyncClient
     ) {
         $body->rewind();
 
-        return $this->messageFactory->createResponse(
+        return $this->responseFactory->createResponse(
             $response->getCode(),
             $response->getReasonPhrase(),
             $response->getHeaders(),
