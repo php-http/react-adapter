@@ -8,6 +8,13 @@
 - Client now requires a Response factory instead of a Message factory
 
 
+## 0.2.1 - 2016-07-18
+
+### Changed
+
+- Updated discovery dependency
+
+
 ## 0.2.0 - 2016-06-28
 
 ### Changed

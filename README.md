@@ -7,7 +7,7 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/php-http/react-adapter.svg?style=flat-square)](https://scrutinizer-ci.com/g/php-http/react-adapter)
 [![Total Downloads](https://img.shields.io/packagist/dt/php-http/react-adapter.svg?style=flat-square)](https://packagist.org/packages/php-http/react-adapter)
 
-[ReactHTTP](http://reactphp.org/) adapter.
+**React HTTP Adapter.**
 
 
 ## Install
@@ -18,38 +18,11 @@ Via Composer
 $ composer require php-http/react-adapter
 ```
 
-## Features
 
-This lib adapt ReactPHP behaviour to use the [PSR7 interfaces](https://github.com/php-fig/http-message).
-Also `sync` and `async` requests are possible without more code than a function call.
+## Documentation
 
-For a deeper `async` comprehension, you must check how ReactPHP engine work.
+Please see the [official documentation](http://docs.php-http.org/en/latest/clients/react-adapter.html).
 
-## Usage
-
-The `Client` class need a [message factory](https://github.com/php-http/message-factory) in order to work:
-
-```php
-$client = new Http\Adapter\React\Client($messageFactory);
-```
-
-For more control, it can also be configured with a specific `React\EventLoop\LoopInterface` and / or a specific `React\HttpClient\Client`:
-
-```php
-$loop = Http\Adapter\React\ReactFactory::buildEventLoop();
-$client = new Http\Adapter\React\Client($messageFactory, $loop);
-
-//or
-
-$reactClient = Http\Adapter\React\ReactFactory::buildHttpClient($loop);
-$client = new Http\Adapter\React\Client(
-    $messageFactory,
-    $loop,
-    $reactClient
-);
-```
-
-If you don't want to use the `Http\Adapter\React\ReactFactory` to build instances you must rely on React documentation on Github: https://github.com/reactphp/http-client#example
 
 ## Testing
 
@@ -67,7 +40,7 @@ $ composer test
 
 ## Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) and [CONDUCT](CONDUCT.md) for details.
+Please see our [contributing guide](http://docs.php-http.org/en/latest/development/contributing.html).
 
 
 ## Security

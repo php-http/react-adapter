@@ -3,7 +3,7 @@
     "description": "React adapter for PHP-HTTP",
     "license": "MIT",
     "keywords": ["http", "react", "httplug"],
-    "homepage": "http://php-http.org",
+    "homepage": "http://httplug.io",
     "authors": [
         {
             "name": "Stéphane HULARD",
@@ -19,7 +19,7 @@
         "php-http/discovery": "^1.0"
     },
     "require-dev": {
-        "php-http/adapter-integration-tests": "^0.4"
+        "php-http/client-integration-tests": "^0.5.1"
     },
     "autoload": {
         "psr-4": {
@@ -43,7 +43,5 @@
     "scripts": {
         "test": "vendor/bin/phpunit",
         "test-ci": "vendor/bin/phpunit --coverage-clover build/coverage.xml"
-    },
-    "prefer-stable": true,
-    "minimum-stability": "beta"
+    }
 }
