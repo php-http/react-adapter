@@ -7,7 +7,9 @@ use Http\Client\HttpAsyncClient;
 use Http\Client\Exception\HttpException;
 use Http\Client\Exception\RequestException;
 use Http\Discovery\MessageFactoryDiscovery;
+use Http\Discovery\StreamFactoryDiscovery;
 use Http\Message\ResponseFactory;
+use Http\Message\StreamFactory;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
@@ -44,16 +46,23 @@ class Client implements HttpClient, HttpAsyncClient
     private $responseFactory;
 
     /**
+     * @var StreamFactory
+     */
+    private $streamFactory;
+
+    /**
      * Initialize the React client.
      *
      * @param ResponseFactory|null $responseFactory
      * @param LoopInterface|null   $loop
      * @param ReactClient|null     $client
+     * @param StreamFactory|null   $streamFactory
      */
     public function __construct(
         ResponseFactory $responseFactory = null,
         LoopInterface $loop = null,
-        ReactClient $client = null
+        ReactClient $client = null,
+        StreamFactory $streamFactory = null
     ) {
         if (null !== $client && null === $loop) {
             throw new \RuntimeException(
@@ -65,6 +74,7 @@ class Client implements HttpClient, HttpAsyncClient
         $this->client = $client ?: ReactFactory::buildHttpClient($this->loop);
 
         $this->responseFactory = $responseFactory ?: MessageFactoryDiscovery::find();
+        $this->streamFactory = $streamFactory ?: StreamFactoryDiscovery::find();
     }
 
     /**
@@ -94,17 +104,12 @@ class Client implements HttpClient, HttpAsyncClient
         });
 
         $reactRequest->on('response', function (ReactResponse $reactResponse = null) use ($deferred, $reactRequest, $request) {
-            $bodyStream = null;
+            $bodyStream = $this->streamFactory->createStream();
             $reactResponse->on('data', function ($data) use (&$bodyStream) {
-                if ($data instanceof StreamInterface) {
-                    $bodyStream = $data;
-                } else {
-                    $bodyStream->write($data);
-                }
+                $bodyStream->write((string) $data);
             });
 
             $reactResponse->on('end', function (\Exception $error = null) use ($deferred, $request, $reactResponse, &$bodyStream) {
-                $bodyStream->rewind();
                 $response = $this->buildResponse(
                     $reactResponse,
                     $bodyStream
@@ -158,7 +163,8 @@ class Client implements HttpClient, HttpAsyncClient
     /**
      * Transform a React Response to a valid PSR7 ResponseInterface instance.
      *
-     * @param ReactResponse $response
+     * @param ReactResponse   $response
+     * @param StreamInterface $body
      *
      * @return ResponseInterface
      */
