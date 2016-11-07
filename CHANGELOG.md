@@ -1,15 +1,15 @@
 # Change Log
 
-## [Unreleased]
+## 0.3.0 - 2016-11-07
+
+### Changed
+
+- Client now require a Stream factory to handle body properly.
 
 ### Fixed
 
 - Issue with `react/http-client` v0.4.13 about body handling as StreamInterface.
 This change was introduce in https://github.com/reactphp/http-client/pull/66.
-
-### Changed
-
-- Client now require a Stream factory to handle body properly.
 
 
 ## 0.2.2 - 2016-07-18
