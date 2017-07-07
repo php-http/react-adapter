@@ -19,7 +19,7 @@
         "php-http/discovery": "^1.0"
     },
     "require-dev": {
-        "php-http/client-integration-tests": "^0.5.1",
+        "php-http/client-integration-tests": "^0.6",
         "php-http/message": "^1.0"
     },
     "provide": {
