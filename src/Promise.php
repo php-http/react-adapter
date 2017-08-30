@@ -14,7 +14,7 @@ use Psr\Http\Message\ResponseInterface;
  *
  * @internal
  */
-class Promise implements HttpPromise
+final class Promise implements HttpPromise
 {
     /**
      * Promise status.
@@ -69,7 +69,7 @@ class Promise implements HttpPromise
      */
     public function then(callable $onFulfilled = null, callable $onRejected = null)
     {
-        $newPromise = new Promise($this->loop);
+        $newPromise = new self($this->loop);
 
         $onFulfilled = $onFulfilled !== null ? $onFulfilled : function (ResponseInterface $response) {
             return $response;
@@ -79,7 +79,7 @@ class Promise implements HttpPromise
             throw $exception;
         };
 
-        $this->onFulfilled = function(ResponseInterface $response) use ($onFulfilled, $newPromise) {
+        $this->onFulfilled = function (ResponseInterface $response) use ($onFulfilled, $newPromise) {
             try {
                 $newPromise->resolve($onFulfilled($response));
             } catch (Exception $exception) {
@@ -87,7 +87,7 @@ class Promise implements HttpPromise
             }
         };
 
-        $this->onRejected = function(Exception $exception) use ($onRejected, $newPromise) {
+        $this->onRejected = function (Exception $exception) use ($onRejected, $newPromise) {
             try {
                 $newPromise->resolve($onRejected($exception));
             } catch (Exception $exception) {
@@ -99,7 +99,7 @@ class Promise implements HttpPromise
     }
 
     /**
-     * Resolve this promise
+     * Resolve this promise.
      *
      * @param ResponseInterface $response
      *
@@ -121,7 +121,7 @@ class Promise implements HttpPromise
     }
 
     /**
-     * Reject this promise
+     * Reject this promise.
      *
      * @param Exception $exception
      *

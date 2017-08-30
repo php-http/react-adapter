@@ -14,7 +14,6 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use React\EventLoop\LoopInterface;
-use React\Promise\Deferred;
 use React\HttpClient\Client as ReactClient;
 use React\HttpClient\Request as ReactRequest;
 use React\HttpClient\Response as ReactResponse;

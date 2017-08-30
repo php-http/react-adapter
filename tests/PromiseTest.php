@@ -6,7 +6,6 @@ use GuzzleHttp\Psr7\Response;
 use Http\Adapter\React\Promise;
 use Http\Adapter\React\ReactFactory;
 use PHPUnit\Framework\TestCase;
-use React\Promise\Deferred;
 
 class PromiseTest extends TestCase
 {
