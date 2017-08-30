@@ -19,16 +19,14 @@ class PromiseTest extends TestCase
 
     public function testChain()
     {
-        $deferred = new Deferred();
-        $promise = new Promise($deferred->promise());
-        $promise->setLoop($this->loop);
+        $promise = new Promise($this->loop);
         $response = new Response(200);
 
         $lastPromise = $promise->then(function (Response $response) {
             return $response->withStatus(300);
         });
 
-        $deferred->resolve($response);
+        $promise->resolve($response);
         $updatedResponse = $lastPromise->wait();
 
         self::assertEquals(200, $response->getStatusCode());
