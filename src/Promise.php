@@ -95,6 +95,14 @@ final class Promise implements HttpPromise
             }
         };
 
+        if ($this->state === HttpPromise::FULFILLED) {
+            $this->doResolve($this->response);
+        }
+
+        if ($this->state === HttpPromise::REJECTED) {
+            $this->doReject($this->exception);
+        }
+
         return $newPromise;
     }
 
@@ -113,6 +121,11 @@ final class Promise implements HttpPromise
 
         $this->state = HttpPromise::FULFILLED;
         $this->response = $response;
+        $this->doResolve($response);
+    }
+
+    private function doResolve(ResponseInterface $response)
+    {
         $onFulfilled = $this->onFulfilled;
 
         if (null !== $onFulfilled) {
@@ -135,6 +148,11 @@ final class Promise implements HttpPromise
 
         $this->state = HttpPromise::REJECTED;
         $this->exception = $exception;
+        $this->doReject($exception);
+    }
+
+    private function doReject(Exception $exception)
+    {
         $onRejected = $this->onRejected;
 
         if (null !== $onRejected) {
