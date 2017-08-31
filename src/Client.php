@@ -14,7 +14,6 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use React\EventLoop\LoopInterface;
-use React\Promise\Deferred;
 use React\HttpClient\Client as ReactClient;
 use React\HttpClient\Request as ReactRequest;
 use React\HttpClient\Response as ReactResponse;
@@ -93,44 +92,41 @@ class Client implements HttpClient, HttpAsyncClient
     public function sendAsyncRequest(RequestInterface $request)
     {
         $reactRequest = $this->buildReactRequest($request);
-        $deferred = new Deferred();
+        $promise = new Promise($this->loop);
 
-        $reactRequest->on('error', function (\Exception $error) use ($deferred, $request) {
-            $deferred->reject(new RequestException(
+        $reactRequest->on('error', function (\Exception $error) use ($promise, $request) {
+            $promise->reject(new RequestException(
                 $error->getMessage(),
                 $request,
                 $error
             ));
         });
 
-        $reactRequest->on('response', function (ReactResponse $reactResponse = null) use ($deferred, $reactRequest, $request) {
+        $reactRequest->on('response', function (ReactResponse $reactResponse = null) use ($promise, $request) {
             $bodyStream = $this->streamFactory->createStream();
             $reactResponse->on('data', function ($data) use (&$bodyStream) {
                 $bodyStream->write((string) $data);
             });
 
-            $reactResponse->on('end', function (\Exception $error = null) use ($deferred, $request, $reactResponse, &$bodyStream) {
+            $reactResponse->on('end', function (\Exception $error = null) use ($promise, $request, $reactResponse, &$bodyStream) {
                 $response = $this->buildResponse(
                     $reactResponse,
                     $bodyStream
                 );
                 if (null !== $error) {
-                    $deferred->reject(new HttpException(
+                    $promise->reject(new HttpException(
                         $error->getMessage(),
                         $request,
                         $response,
                         $error
                     ));
                 } else {
-                    $deferred->resolve($response);
+                    $promise->resolve($response);
                 }
             });
         });
 
         $reactRequest->end((string) $request->getBody());
-
-        $promise = new Promise($deferred->promise());
-        $promise->setLoop($this->loop);
 
         return $promise;
     }
