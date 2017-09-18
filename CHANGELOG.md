@@ -1,5 +1,21 @@
 # Change Log
 
+## 2.0.0 - 2017-09-18
+
+### Changed
+
+- Promise adapter is internal and not extendable [BC Break]
+
+### Fixed
+
+- Promise adapter rewrote to handle chain operation
+
+## 1.0.0 - 2017-07-08
+
+### Changed
+
+- Tests update to last version
+
 ## 0.3.0 - 2016-11-07
 
 ### Changed
