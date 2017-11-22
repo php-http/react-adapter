@@ -71,11 +71,11 @@ final class Promise implements HttpPromise
     {
         $newPromise = new self($this->loop);
 
-        $onFulfilled = $onFulfilled !== null ? $onFulfilled : function (ResponseInterface $response) {
+        $onFulfilled = null !== $onFulfilled ? $onFulfilled : function (ResponseInterface $response) {
             return $response;
         };
 
-        $onRejected = $onRejected !== null ? $onRejected : function (Exception $exception) {
+        $onRejected = null !== $onRejected ? $onRejected : function (Exception $exception) {
             throw $exception;
         };
 
@@ -95,11 +95,11 @@ final class Promise implements HttpPromise
             }
         };
 
-        if ($this->state === HttpPromise::FULFILLED) {
+        if (HttpPromise::FULFILLED === $this->state) {
             $this->doResolve($this->response);
         }
 
-        if ($this->state === HttpPromise::REJECTED) {
+        if (HttpPromise::REJECTED === $this->state) {
             $this->doReject($this->exception);
         }
 
@@ -115,7 +115,7 @@ final class Promise implements HttpPromise
      */
     public function resolve(ResponseInterface $response)
     {
-        if ($this->state !== HttpPromise::PENDING) {
+        if (HttpPromise::PENDING !== $this->state) {
             throw new \RuntimeException('Promise is already resolved');
         }
 
@@ -142,7 +142,7 @@ final class Promise implements HttpPromise
      */
     public function reject(Exception $exception)
     {
-        if ($this->state !== HttpPromise::PENDING) {
+        if (HttpPromise::PENDING !== $this->state) {
             throw new \RuntimeException('Promise is already resolved');
         }
 
