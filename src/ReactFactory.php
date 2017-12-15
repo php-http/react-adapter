@@ -6,8 +6,9 @@ use React\EventLoop\LoopInterface;
 use React\EventLoop\Factory as EventLoopFactory;
 use React\Dns\Resolver\Resolver as DnsResolver;
 use React\Dns\Resolver\Factory as DnsResolverFactory;
-use React\HttpClient\Factory as HttpClientFactory;
 use React\HttpClient\Client as HttpClient;
+use React\Socket\Connector;
+use React\Socket\DnsConnector;
 
 /**
  * Factory wrapper for React instances.
@@ -55,12 +56,25 @@ class ReactFactory
         LoopInterface $loop,
         DnsResolver $dns = null
     ) {
+        $dnsConnector = static::buildDnsConnector($loop, $dns);
+
+        return new HttpClient($loop, $dnsConnector);
+    }
+
+    /**
+     * @param LoopInterface    $loop
+     * @param DnsResolver|null $dns
+     *
+     * @return DnsConnector
+     */
+    public static function buildDnsConnector(
+        LoopInterface $loop,
+        DnsResolver $dns = null
+    ) {
         if (null === $dns) {
             $dns = self::buildDnsResolver($loop);
         }
 
-        $factory = new HttpClientFactory();
-
-        return $factory->create($loop, $dns);
+        return new DnsConnector(new Connector($loop), $dns);
     }
 }
