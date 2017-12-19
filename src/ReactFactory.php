@@ -82,7 +82,7 @@ class ReactFactory
     }
 
     /**
-     * Builds a React Http client v0.4 style
+     * Builds a React Http client v0.4 style.
      *
      * @param LoopInterface    $loop
      * @param DnsResolver|null $dns
@@ -109,7 +109,7 @@ class ReactFactory
     }
 
     /**
-     * Builds a React Http client v0.5 style
+     * Builds a React Http client v0.5 style.
      *
      * @param LoopInterface                       $loop
      * @param DnsResolver|ConnectorInterface|null $connector

@@ -35,7 +35,7 @@ class ReactFactoryTest extends TestCase
         }
 
         $connector = $this->getMockBuilder(ConnectorInterface::class)->getMock();
-        $client    = ReactFactory::buildHttpClient($this->loop, $connector);
+        $client = ReactFactory::buildHttpClient($this->loop, $connector);
         $this->assertInstanceOf(Client::class, $client);
     }
 
@@ -46,7 +46,7 @@ class ReactFactoryTest extends TestCase
     public function testBuildHttpClientWithDnsResolver()
     {
         $connector = $this->getMockBuilder(Resolver::class)->disableOriginalConstructor()->getMock();
-        $client    = ReactFactory::buildHttpClient($this->loop, $connector);
+        $client = ReactFactory::buildHttpClient($this->loop, $connector);
         $this->assertInstanceOf(Client::class, $client);
     }
 
