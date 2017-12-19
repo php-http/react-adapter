@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use React\Dns\Resolver\Resolver;
 use React\EventLoop\LoopInterface;
 use React\HttpClient\Client;
+use React\HttpClient\Factory;
 use React\Socket\ConnectorInterface;
 
 /**
@@ -24,12 +25,17 @@ class ReactFactoryTest extends TestCase
 
     protected function setUp()
     {
-        $this->loop = $this->createMock(LoopInterface::class);
+        $this->loop = $this->getMockBuilder(LoopInterface::class)->getMock();
     }
 
     public function testBuildHttpClientWithConnector()
     {
-        $client = ReactFactory::buildHttpClient($this->loop, $this->createMock(ConnectorInterface::class));
+        if (class_exists(Factory::class)) {
+            $this->markTestSkipped('This test only runs with react http client v0.5 and above');
+        }
+
+        $connector = $this->getMockBuilder(ConnectorInterface::class)->getMock();
+        $client    = ReactFactory::buildHttpClient($this->loop, $connector);
         $this->assertInstanceOf(Client::class, $client);
     }
 
@@ -39,7 +45,8 @@ class ReactFactoryTest extends TestCase
      */
     public function testBuildHttpClientWithDnsResolver()
     {
-        $client = ReactFactory::buildHttpClient($this->loop, $this->createMock(Resolver::class));
+        $connector = $this->getMockBuilder(Resolver::class)->disableOriginalConstructor()->getMock();
+        $client    = ReactFactory::buildHttpClient($this->loop, $connector);
         $this->assertInstanceOf(Client::class, $client);
     }
 
@@ -49,9 +56,12 @@ class ReactFactoryTest extends TestCase
         $this->assertInstanceOf(Client::class, $client);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
     public function testBuildHttpClientWithInvalidConnectorThrowsException()
     {
-        $this->expectException(\InvalidArgumentException::class);
-        ReactFactory::buildHttpClient($this->loop, $this->createMock(LoopInterface::class));
+        $connector = $this->getMockBuilder(LoopInterface::class)->getMock();
+        ReactFactory::buildHttpClient($this->loop, $connector);
     }
 }
