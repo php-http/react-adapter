@@ -64,8 +64,9 @@ class ReactFactory
      * Build a React Http Client.
      *
      * @param LoopInterface                       $loop
-     * @param ConnectorInterface|DnsResolver|null $connector Passing a DnsResolver instance is deprecated. Should pass a
-     *                                                       ConnectorInterface instance.
+     * @param ConnectorInterface|DnsResolver|null $connector Only pass this argument if you need to customize DNS
+     *                                                       behaviour. With react http client v0.5, pass a connector,
+     *                                                       with v0.4 this must be a DnsResolver.
      *
      * @return HttpClient
      */
@@ -89,7 +90,7 @@ class ReactFactory
      *
      * @return HttpClient
      */
-    private static function buildHttpClient04(
+    protected static function buildHttpClient04(
         LoopInterface $loop,
         $dns = null
     ) {
@@ -100,7 +101,7 @@ class ReactFactory
 
         // validate connector instance for proper error reporting
         if (!$dns instanceof DnsResolver) {
-            throw new \InvalidArgumentException('$connector must be an instance of DnsResolver');
+            throw new \InvalidArgumentException('For react http client v0.4, $dns must be an instance of DnsResolver');
         }
 
         $factory = new HttpClientFactory();
@@ -116,12 +117,20 @@ class ReactFactory
      *
      * @return HttpClient
      */
-    private static function buildHttpClient05(
+    protected static function buildHttpClient05(
         LoopInterface $loop,
         $connector = null
     ) {
         // build a connector with given DnsResolver if provided (old deprecated behavior)
         if ($connector instanceof DnsResolver) {
+            @trigger_error(
+                sprintf(
+                    'Passing a %s to buildHttpClient is deprecated since version 2.1.0 and will be removed in 3.0. If you need no specific behaviour, omit the $dns argument, otherwise pass a %s',
+                    DnsResolver::class,
+                    ConnectorInterface::class
+                ),
+                E_USER_DEPRECATED
+            );
             $connector = static::buildConnector($loop, $connector);
         }
 

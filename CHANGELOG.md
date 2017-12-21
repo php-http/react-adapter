@@ -1,5 +1,17 @@
 # Change Log
 
+## 2.1.0 - 2017-12-20
+
+### Changed
+
+- Added compatibility with `react/http-client` v0.5 (compatibility with v0.4 kept)
+- `ReactFactory::buildHttpClient` now accepts a `\React\Socket\ConnectorInterface` (only for `react/http-client` v0.5).
+If none provided, will use React HTTP Client defaults. 
+
+### Deprecations
+- Passing a `\React\Dns\Resolver\Resolver` to `ReactFactory::buildHttpClient` is deprecated and will be removed in **3.0.0**.
+To control connector behavior (DNS, timeout, etc), pass a `\React\Socket\ConnectorInterface` instead.
+
 ## 2.0.0 - 2017-09-18
 
 ### Changed
