@@ -81,7 +81,9 @@ final class Promise implements HttpPromise
 
         $this->onFulfilled = function (ResponseInterface $response) use ($onFulfilled, $newPromise) {
             try {
-                $newPromise->resolve($onFulfilled($response));
+                $return = $onFulfilled($response);
+
+                $newPromise->resolve(null !== $return ? $return : $response);
             } catch (Exception $exception) {
                 $newPromise->reject($exception);
             }
