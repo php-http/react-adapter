@@ -175,8 +175,12 @@ final class Promise implements HttpPromise
      */
     public function wait($unwrap = true)
     {
+        $loop = $this->loop;
         while (HttpPromise::PENDING === $this->getState()) {
-            $this->loop->tick();
+            $loop->futureTick(function () use ($loop) {
+                $loop->stop();
+            });
+            $loop->run();
         }
 
         if ($unwrap) {
