@@ -7,17 +7,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## Unreleased
+## [Unreleased]
 
 
-## 2.2.0 - 2018-11-03
+## [2.2.0] - 2018-11-03
 
 ### Fixed
 
 - React HTTP 0.5 BC break
 
 
-## 2.1.0 - 2017-12-21
+## [2.1.0] - 2017-12-21
 
 ### Changed
 
@@ -30,7 +30,7 @@ If none provided, will use React HTTP Client defaults.
 To control connector behavior (DNS, timeout, etc), pass a `\React\Socket\ConnectorInterface` instead.
 
 
-## 2.0.0 - 2017-09-18
+## [2.0.0] - 2017-09-18
 
 ### Changed
 
@@ -41,14 +41,14 @@ To control connector behavior (DNS, timeout, etc), pass a `\React\Socket\Connect
 - Promise adapter rewrote to handle chain operation
 
 
-## 1.0.0 - 2017-07-08
+## [1.0.0] - 2017-07-08
 
 ### Changed
 
 - Tests update to last version
 
 
-## 0.3.0 - 2016-11-07
+## [0.3.0] - 2016-11-07
 
 ### Changed
 
@@ -60,28 +60,28 @@ To control connector behavior (DNS, timeout, etc), pass a `\React\Socket\Connect
 This change was introduce in https://github.com/reactphp/http-client/pull/66.
 
 
-## 0.2.2 - 2016-07-18
+## [0.2.2] - 2016-07-18
 
 ### Changed
 
 - Client now requires a Response factory instead of a Message factory
 
 
-## 0.2.1 - 2016-07-18
+## [0.2.1] - 2016-07-18
 
 ### Changed
 
 - Updated discovery dependency
 
 
-## 0.2.0 - 2016-06-28
+## [0.2.0] - 2016-06-28
 
 ### Changed
 
 - Updated discovery dependency
 
 
-## 0.1.1 - 2016-03-08
+## [0.1.1] - 2016-03-08
 
 ### Fixed
 
