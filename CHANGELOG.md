@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.0] - 2019-07-30
+
+### Changed
+
+- Allow installation with react dns 1.0
+- Drop unmaintained PHP version support
 
 ## [2.2.0] - 2018-11-03
 
