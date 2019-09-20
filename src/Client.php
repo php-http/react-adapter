@@ -79,7 +79,7 @@ class Client implements HttpClient, HttpAsyncClient
     /**
      * {@inheritdoc}
      */
-    public function sendRequest(RequestInterface $request)
+    public function sendRequest(RequestInterface $request): ResponseInterface
     {
         $promise = $this->sendAsyncRequest($request);
 

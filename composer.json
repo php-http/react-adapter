@@ -12,7 +12,7 @@
     ],
     "require": {
         "php": "^7.1",
-        "php-http/httplug": "^1.0",
+        "php-http/httplug": "^2.0",
         "react/http-client": "~0.5.9",
         "react/dns": "^1.0|^0.4.15",
         "react/socket": "^1.0",
@@ -21,7 +21,7 @@
         "php-http/discovery": "^1.0"
     },
     "require-dev": {
-        "php-http/client-integration-tests": "^0.6",
+        "php-http/client-integration-tests": "^2.0",
         "php-http/message": "^1.0",
         "phpunit/phpunit": "^4.8.36 || ^5.4"
     },
