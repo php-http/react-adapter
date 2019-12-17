@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Work with HTTPlug 2, drop HTTPlug 1 support
+
 ## [2.3.0] - 2019-07-30
 
 ### Changed
