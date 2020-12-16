@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": "^7.1",
+        "php": "^7.1|^8.0",
         "php-http/httplug": "^2.0",
         "react/http": "^1.0",
         "react/event-loop": "^1.0",
