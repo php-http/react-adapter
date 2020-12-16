@@ -2,15 +2,19 @@
 
 namespace Http\Adapter\React;
 
-use React\EventLoop\LoopInterface;
-use Http\Client\Exception;
+use Http\Client\Exception as HttplugException;
 use Http\Promise\Promise as HttpPromise;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use React\EventLoop\LoopInterface;
+use React\Promise\PromiseInterface;
+use RuntimeException;
+use UnexpectedValueException;
 
 /**
  * React promise adapter implementation.
  *
- * @author Stéphane Hulard <stephane@hlrd.me>
+ * @author Stéphane Hulard <s.hulard@chstudio.fr>
  *
  * @internal
  */
@@ -38,128 +42,62 @@ final class Promise implements HttpPromise
     private $exception;
 
     /**
-     * @var callable|null
+     * HTTP Request.
+     *
+     * @var RequestInterface
      */
-    private $onFulfilled;
+    private $request;
 
     /**
-     * @var callable|null
+     * Adapted ReactPHP promise.
+     *
+     * @var PromiseInterface
      */
-    private $onRejected;
+    private $promise;
 
     /**
-     * React Event Loop used for synchronous processing.
+     * ReactPHP LoopInterface.
      *
      * @var LoopInterface
      */
     private $loop;
 
-    public function __construct(LoopInterface $loop)
+    public function __construct(PromiseInterface $promise, LoopInterface $loop, RequestInterface $request)
     {
+        $this->state = self::PENDING;
+
+        $this->request = $request;
         $this->loop = $loop;
+        $this->promise = $promise->then(
+            function (?ResponseInterface $response): ResponseInterface {
+                $this->response = $response;
+                $this->state = self::FULFILLED;
+
+                return $response;
+            },
+            /**
+             * @param mixed $reason
+             */
+            function ($reason): void {
+                $this->state = self::REJECTED;
+
+                if ($reason instanceof HttplugException) {
+                    $this->exception = $reason;
+                } elseif ($reason instanceof RuntimeException) {
+                    $this->exception = new HttplugException\NetworkException($reason->getMessage(), $this->request, $reason);
+                } elseif ($reason instanceof \Throwable) {
+                    $this->exception = new HttplugException\TransferException('Invalid exception returned from ReactPHP', 0, $reason);
+                } else {
+                    $this->exception = new UnexpectedValueException('Reason returned from ReactPHP must be an Exception');
+                }
+
+                throw $this->exception;
+            });
     }
 
-    /**
-     * Allow to apply callable when the promise resolve.
-     *
-     * @param callable|null $onFulfilled
-     * @param callable|null $onRejected
-     *
-     * @return Promise
-     */
-    public function then(callable $onFulfilled = null, callable $onRejected = null)
+    public function then(?callable $onFulfilled = null, ?callable $onRejected = null)
     {
-        $newPromise = new self($this->loop);
-
-        $onFulfilled = null !== $onFulfilled ? $onFulfilled : function (ResponseInterface $response) {
-            return $response;
-        };
-
-        $onRejected = null !== $onRejected ? $onRejected : function (Exception $exception) {
-            throw $exception;
-        };
-
-        $this->onFulfilled = function (ResponseInterface $response) use ($onFulfilled, $newPromise) {
-            try {
-                $return = $onFulfilled($response);
-
-                $newPromise->resolve(null !== $return ? $return : $response);
-            } catch (Exception $exception) {
-                $newPromise->reject($exception);
-            }
-        };
-
-        $this->onRejected = function (Exception $exception) use ($onRejected, $newPromise) {
-            try {
-                $newPromise->resolve($onRejected($exception));
-            } catch (Exception $exception) {
-                $newPromise->reject($exception);
-            }
-        };
-
-        if (HttpPromise::FULFILLED === $this->state) {
-            $this->doResolve($this->response);
-        }
-
-        if (HttpPromise::REJECTED === $this->state) {
-            $this->doReject($this->exception);
-        }
-
-        return $newPromise;
-    }
-
-    /**
-     * Resolve this promise.
-     *
-     * @param ResponseInterface $response
-     *
-     * @internal
-     */
-    public function resolve(ResponseInterface $response)
-    {
-        if (HttpPromise::PENDING !== $this->state) {
-            throw new \RuntimeException('Promise is already resolved');
-        }
-
-        $this->state = HttpPromise::FULFILLED;
-        $this->response = $response;
-        $this->doResolve($response);
-    }
-
-    private function doResolve(ResponseInterface $response)
-    {
-        $onFulfilled = $this->onFulfilled;
-
-        if (null !== $onFulfilled) {
-            $onFulfilled($response);
-        }
-    }
-
-    /**
-     * Reject this promise.
-     *
-     * @param Exception $exception
-     *
-     * @internal
-     */
-    public function reject(Exception $exception)
-    {
-        if (HttpPromise::PENDING !== $this->state) {
-            throw new \RuntimeException('Promise is already resolved');
-        }
-
-        $this->state = HttpPromise::REJECTED;
-        $this->exception = $exception;
-        $this->doReject($exception);
-    }
-
-    private function doReject(Exception $exception)
-    {
-        $onRejected = $this->onRejected;
-
-        if (null !== $onRejected) {
-            $onRejected($exception);
-        }
+        return new self($this->promise->then($onFulfilled, $onRejected), $this->loop, $this->request);
     }
 
     /**

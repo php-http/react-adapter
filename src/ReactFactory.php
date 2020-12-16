@@ -16,10 +16,8 @@ class ReactFactory
 {
     /**
      * Build a react Event Loop.
-     *
-     * @return LoopInterface
      */
-    public static function buildEventLoop()
+    public static function buildEventLoop(): LoopInterface
     {
         return EventLoopFactory::create();
     }
@@ -27,11 +25,8 @@ class ReactFactory
     /**
      * Build a React Http Client.
      *
-     * @param LoopInterface           $loop
      * @param ConnectorInterface|null $connector Only pass this argument if you need to customize DNS
      *                                           behaviour.
-     *
-     * @return Browser
      */
     public static function buildHttpClient(
         LoopInterface $loop,

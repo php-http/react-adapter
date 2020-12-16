@@ -2,21 +2,17 @@
 
 namespace Http\Adapter\React\Tests;
 
-use Http\Client\HttpClient;
 use Http\Client\Tests\HttpAsyncClientTest;
 use Http\Adapter\React\Client;
-use Http\Message\MessageFactory\GuzzleMessageFactory;
+use Http\Client\HttpAsyncClient;
 
 /**
- * @author Stéphane Hulard <stephane@hlrd.me>
+ * @author Stéphane Hulard <s.hulard@chstudio.fr>
  */
 class AsyncClientTest extends HttpAsyncClientTest
 {
-    /**
-     * @return HttpClient
-     */
-    protected function createHttpAsyncClient()
+    protected function createHttpAsyncClient(): HttpAsyncClient
     {
-        return new Client(new GuzzleMessageFactory());
+        return new Client();
     }
 }
