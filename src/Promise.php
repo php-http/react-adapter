@@ -30,14 +30,14 @@ final class Promise implements HttpPromise
     /**
      * PSR7 received response.
      *
-     * @var ResponseInterface
+     * @var ResponseInterface|null
      */
     private $response;
 
     /**
      * Execution error.
      *
-     * @var Exception
+     * @var HttplugException
      */
     private $exception;
 
@@ -69,7 +69,7 @@ final class Promise implements HttpPromise
         $this->request = $request;
         $this->loop = $loop;
         $this->promise = $promise->then(
-            function (?ResponseInterface $response): ResponseInterface {
+            function (?ResponseInterface $response): ?ResponseInterface {
                 $this->response = $response;
                 $this->state = self::FULFILLED;
 
@@ -92,7 +92,8 @@ final class Promise implements HttpPromise
                 }
 
                 throw $this->exception;
-            });
+            }
+        );
     }
 
     public function then(?callable $onFulfilled = null, ?callable $onRejected = null)
