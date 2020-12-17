@@ -15,8 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Work with HTTPlug 2, drop HTTPlug 1 support
-- Move to `react/http` library instead of `react/http-client`
+- Add full PSR-18 support.
+- Work with HTTPlug 2, drop HTTPlug 1 support.
+- Move to `react/http` library instead of `react/http-client`.
 
 ## [2.3.0] - 2019-07-30
 
