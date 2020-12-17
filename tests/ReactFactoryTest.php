@@ -4,10 +4,8 @@ namespace Http\Adapter\React\Tests;
 
 use Http\Adapter\React\ReactFactory;
 use PHPUnit\Framework\TestCase;
-use React\Dns\Resolver\Resolver;
 use React\EventLoop\LoopInterface;
-use React\HttpClient\Client;
-use React\HttpClient\Factory;
+use React\Http\Browser;
 use React\Socket\ConnectorInterface;
 
 /**
@@ -23,45 +21,22 @@ class ReactFactoryTest extends TestCase
      */
     private $loop;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->loop = $this->getMockBuilder(LoopInterface::class)->getMock();
     }
 
     public function testBuildHttpClientWithConnector()
     {
-        if (class_exists(Factory::class)) {
-            $this->markTestSkipped('This test only runs with react http client v0.5 and above');
-        }
-
+        /** @var ConnectorInterface $connector */
         $connector = $this->getMockBuilder(ConnectorInterface::class)->getMock();
         $client = ReactFactory::buildHttpClient($this->loop, $connector);
-        $this->assertInstanceOf(Client::class, $client);
-    }
-
-    /**
-     * @deprecated Building HTTP client passing a DnsResolver instance is deprecated. Should pass a ConnectorInterface
-     *             instance instead.
-     */
-    public function testBuildHttpClientWithDnsResolver()
-    {
-        $connector = $this->getMockBuilder(Resolver::class)->disableOriginalConstructor()->getMock();
-        $client = ReactFactory::buildHttpClient($this->loop, $connector);
-        $this->assertInstanceOf(Client::class, $client);
+        $this->assertInstanceOf(Browser::class, $client);
     }
 
     public function testBuildHttpClientWithoutConnector()
     {
         $client = ReactFactory::buildHttpClient($this->loop);
-        $this->assertInstanceOf(Client::class, $client);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testBuildHttpClientWithInvalidConnectorThrowsException()
-    {
-        $connector = $this->getMockBuilder(LoopInterface::class)->getMock();
-        ReactFactory::buildHttpClient($this->loop, $connector);
+        $this->assertInstanceOf(Browser::class, $client);
     }
 }

@@ -2,21 +2,17 @@
 
 namespace Http\Adapter\React\Tests;
 
-use Http\Client\HttpClient;
 use Http\Client\Tests\HttpClientTest;
 use Http\Adapter\React\Client;
-use Http\Message\MessageFactory\GuzzleMessageFactory;
+use Psr\Http\Client\ClientInterface;
 
 /**
- * @author Stéphane Hulard <stephane@hlrd.me>
+ * @author Stéphane Hulard <s.hulard@chstudio.fr>
  */
 class ClientTest extends HttpClientTest
 {
-    /**
-     * @return HttpClient
-     */
-    protected function createHttpAdapter()
+    protected function createHttpAdapter(): ClientInterface
     {
-        return new Client(new GuzzleMessageFactory());
+        return new Client();
     }
 }
