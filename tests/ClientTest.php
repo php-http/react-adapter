@@ -2,8 +2,8 @@
 
 namespace Http\Adapter\React\Tests;
 
-use Http\Client\Tests\HttpClientTest;
 use Http\Adapter\React\Client;
+use Http\Client\Tests\HttpClientTest;
 use Psr\Http\Client\ClientInterface;
 
 /**

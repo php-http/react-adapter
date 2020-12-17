@@ -2,9 +2,9 @@
 
 namespace Http\Adapter\React\Tests;
 
-use Http\Client\Tests\HttpAsyncClientTest;
 use Http\Adapter\React\Client;
 use Http\Client\HttpAsyncClient;
+use Http\Client\Tests\HttpAsyncClientTest;
 
 /**
  * @author Stéphane Hulard <s.hulard@chstudio.fr>
