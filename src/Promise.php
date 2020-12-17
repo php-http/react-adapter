@@ -2,6 +2,7 @@
 
 namespace Http\Adapter\React;
 
+use Http\Adapter\React\Exception\UnexpectedValueException;
 use Http\Client\Exception as HttplugException;
 use Http\Promise\Promise as HttpPromise;
 use Psr\Http\Message\RequestInterface;
@@ -9,7 +10,6 @@ use Psr\Http\Message\ResponseInterface;
 use React\EventLoop\LoopInterface;
 use React\Promise\PromiseInterface;
 use RuntimeException;
-use UnexpectedValueException;
 
 /**
  * React promise adapter implementation.

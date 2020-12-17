@@ -2,6 +2,7 @@
 
 namespace Http\Adapter\React\Tests;
 
+use Http\Adapter\React\Exception\UnexpectedValueException;
 use Http\Adapter\React\Promise;
 use Http\Adapter\React\ReactFactory;
 use Http\Client\Exception\HttpException;
@@ -14,7 +15,6 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use React\Promise\Promise as ReactPromise;
 use RuntimeException;
-use UnexpectedValueException;
 
 class PromiseTest extends TestCase
 {
