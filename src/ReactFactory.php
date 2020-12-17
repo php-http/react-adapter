@@ -2,8 +2,8 @@
 
 namespace Http\Adapter\React;
 
-use React\EventLoop\LoopInterface;
 use React\EventLoop\Factory as EventLoopFactory;
+use React\EventLoop\LoopInterface;
 use React\Http\Browser;
 use React\Socket\ConnectorInterface;
 
@@ -25,8 +25,8 @@ class ReactFactory
     /**
      * Build a React Http Client.
      *
-     * @param ConnectorInterface|null $connector Only pass this argument if you need to customize DNS
-     *                                           behaviour.
+     * @param ConnectorInterface|null $connector only pass this argument if you need to customize DNS
+     *                                           behaviour
      */
     public static function buildHttpClient(
         LoopInterface $loop,

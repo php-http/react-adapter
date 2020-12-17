@@ -2,8 +2,8 @@
 
 namespace Http\Adapter\React;
 
-use Http\Client\HttpClient;
 use Http\Client\HttpAsyncClient;
+use Http\Client\HttpClient;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use React\EventLoop\LoopInterface;
