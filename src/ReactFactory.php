@@ -2,7 +2,7 @@
 
 namespace Http\Adapter\React;
 
-use React\EventLoop\Factory as EventLoopFactory;
+use \React\EventLoop\Loop;
 use React\EventLoop\LoopInterface;
 use React\Http\Browser;
 use React\Socket\ConnectorInterface;
@@ -19,7 +19,7 @@ class ReactFactory
      */
     public static function buildEventLoop(): LoopInterface
     {
-        return EventLoopFactory::create();
+        return Loop::get();
     }
 
     /**
