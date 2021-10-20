@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Replaced factory with loop::get() as factory depreciated.
+- Replaced EventFactory::create with Loop::get as the factory has been deprecated.
 
 ## [3.0.0] - 2020-12-17
 
