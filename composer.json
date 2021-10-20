@@ -15,21 +15,13 @@
         "php-http/httplug": "^2.0",
         "react/http": "^1.0",
         "react/event-loop": "^1.2",
-        "php-http/discovery": "^1.0",
-        "php-http/promise":"dev-master"
+        "php-http/discovery": "^1.0"
     },
     "require-dev": {
         "php-http/client-integration-tests": "^3.0",
         "php-http/message": "^1.0",
         "nyholm/psr7": "^1.3"
     },
-    "repositories": [
-        {
-            "only": ["php-http/promise"],
-            "type": "vcs",
-            "url": "https://github.com/tolgaulas/promise"
-        }        
-    ], 
     "provide": {
         "php-http/client-implementation": "1.0",
         "php-http/async-client-implementation": "1.0"
