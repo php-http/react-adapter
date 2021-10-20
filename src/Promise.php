@@ -130,11 +130,4 @@ final class Promise implements HttpPromise
             return $this->response;
         }
     }
-
-    public function cancel(){
-        $loop = $this->loop;
-        $loop->futureTick(function () use ($loop) {
-            $loop->stop();
-        });
-    }
 }
