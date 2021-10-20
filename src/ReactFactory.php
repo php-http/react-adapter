@@ -2,7 +2,7 @@
 
 namespace Http\Adapter\React;
 
-use \React\EventLoop\Loop;
+use React\EventLoop\Loop;
 use React\EventLoop\LoopInterface;
 use React\Http\Browser;
 use React\Socket\ConnectorInterface;
