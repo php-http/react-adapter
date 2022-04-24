@@ -7,6 +7,9 @@ use Http\Client\Exception as HttplugException;
 use Http\Promise\Promise as HttpPromise;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+
+use function React\Async\await;
+
 use React\EventLoop\LoopInterface;
 use React\Promise\PromiseInterface;
 use RuntimeException;
@@ -114,12 +117,9 @@ final class Promise implements HttpPromise
      */
     public function wait($unwrap = true)
     {
-        $loop = $this->loop;
-        while (HttpPromise::PENDING === $this->getState()) {
-            $loop->futureTick(function () use ($loop) {
-                $loop->stop();
-            });
-            $loop->run();
+        try {
+            await($this->promise);
+        } catch (\Throwable) {
         }
 
         if ($unwrap) {
