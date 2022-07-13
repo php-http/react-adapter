@@ -52,6 +52,8 @@ class Client implements HttpClient, HttpAsyncClient
     {
         $promise = $this->sendAsyncRequest($request);
 
+        // The promise is declared to return mixed, but the react client promise returns a response.
+        // We unwrap the exception if there is any, otherwise the promise would return null on error.
         return $promise->wait();
     }
 
