@@ -71,11 +71,11 @@ class PromiseTest extends TestCase
         $response = $this->getMockBuilder(ResponseInterface::class)->getMock();
 
         return [
-            'string' => [$request, 'whatever', UnexpectedValueException::class],
+            'string'                   => [$request, 'whatever', UnexpectedValueException::class],
             'InvalidArgumentException' => [$request, new InvalidArgumentException('Something went wrong'), TransferException::class],
-            'RuntimeException' => [$request, new RuntimeException('Something happened inside ReactPHP engine'), NetworkException::class],
-            'NetworkException' => [$request, new NetworkException('Something happened inside ReactPHP engine', $request), NetworkException::class],
-            'HttpException' => [$request, new HttpException('Something happened inside ReactPHP engine', $request, $response), HttpException::class],
+            'RuntimeException'         => [$request, new RuntimeException('Something happened inside ReactPHP engine'), NetworkException::class],
+            'NetworkException'         => [$request, new NetworkException('Something happened inside ReactPHP engine', $request), NetworkException::class],
+            'HttpException'            => [$request, new HttpException('Something happened inside ReactPHP engine', $request, $response), HttpException::class],
         ];
     }
 }
