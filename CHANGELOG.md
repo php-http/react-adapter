@@ -8,7 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Detect supported PHP versions in range during CI instead of hardcoding them
+### Changed
+
+- Use PHP 8.1 fibers as async mechanism.
+- Detect supported PHP versions in range during CI instead of hardcoding them.
 
 ### Changed
 
