@@ -10,9 +10,7 @@ use Psr\Http\Message\ResponseInterface;
 
 use function React\Async\await;
 
-use React\EventLoop\LoopInterface;
 use React\Promise\PromiseInterface;
-use RuntimeException;
 
 /**
  * React promise adapter implementation.
@@ -58,19 +56,11 @@ final class Promise implements HttpPromise
      */
     private $promise;
 
-    /**
-     * ReactPHP LoopInterface.
-     *
-     * @var LoopInterface
-     */
-    private $loop;
-
-    public function __construct(PromiseInterface $promise, LoopInterface $loop, RequestInterface $request)
+    public function __construct(PromiseInterface $promise, RequestInterface $request)
     {
         $this->state = self::PENDING;
 
         $this->request = $request;
-        $this->loop = $loop;
         $this->promise = $promise->then(
             function (?ResponseInterface $response): ?ResponseInterface {
                 $this->response = $response;
@@ -86,7 +76,7 @@ final class Promise implements HttpPromise
 
                 if ($reason instanceof HttplugException) {
                     $this->exception = $reason;
-                } elseif ($reason instanceof RuntimeException) {
+                } elseif ($reason instanceof \RuntimeException) {
                     $this->exception = new HttplugException\NetworkException($reason->getMessage(), $this->request, $reason);
                 } elseif ($reason instanceof \Throwable) {
                     $this->exception = new HttplugException\TransferException('Invalid exception returned from ReactPHP', 0, $reason);
@@ -101,7 +91,7 @@ final class Promise implements HttpPromise
 
     public function then(?callable $onFulfilled = null, ?callable $onRejected = null)
     {
-        return new self($this->promise->then($onFulfilled, $onRejected), $this->loop, $this->request);
+        return new self($this->promise->then($onFulfilled, $onRejected), $this->request);
     }
 
     /**

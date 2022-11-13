@@ -69,7 +69,6 @@ class Client implements HttpClient, HttpAsyncClient
                 $request->getHeaders(),
                 $request->getBody()
             ),
-            $this->loop,
             $request
         );
 
