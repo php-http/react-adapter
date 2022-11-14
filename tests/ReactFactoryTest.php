@@ -4,7 +4,6 @@ namespace Http\Adapter\React\Tests;
 
 use Http\Adapter\React\ReactFactory;
 use PHPUnit\Framework\TestCase;
-use React\EventLoop\LoopInterface;
 use React\Http\Browser;
 use React\Socket\ConnectorInterface;
 
@@ -16,27 +15,17 @@ use React\Socket\ConnectorInterface;
  */
 class ReactFactoryTest extends TestCase
 {
-    /**
-     * @var \React\EventLoop\LoopInterface
-     */
-    private $loop;
-
-    protected function setUp(): void
-    {
-        $this->loop = $this->getMockBuilder(LoopInterface::class)->getMock();
-    }
-
     public function testBuildHttpClientWithConnector()
     {
         /** @var ConnectorInterface $connector */
         $connector = $this->getMockBuilder(ConnectorInterface::class)->getMock();
-        $client = ReactFactory::buildHttpClient($this->loop, $connector);
+        $client = ReactFactory::buildHttpClient($connector);
         $this->assertInstanceOf(Browser::class, $client);
     }
 
     public function testBuildHttpClientWithoutConnector()
     {
-        $client = ReactFactory::buildHttpClient($this->loop);
+        $client = ReactFactory::buildHttpClient();
         $this->assertInstanceOf(Browser::class, $client);
     }
 }
