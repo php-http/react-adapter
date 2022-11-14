@@ -25,8 +25,19 @@ async(static function () {
 })();
 ```
 
+Another major change in this release is that you no longer inject the event loop into the client. It now
+only uses the global loop accessor. This ensures the same event loop is used everywhere and makes creating
+the client a bit simpler:
+
+```php
+use Http\Adapter\React\ReactFactory;
+
+$reactHttp = ReactFactory::buildHttpClient();
+```
+
 ### Changed
 
+- Removed injecting of the event loop and fully switched to using the global loop accessor (`Loop::get()`)
 - Use PHP 8.1 fibers as async mechanism.
 - Detect supported PHP versions in range during CI instead of hardcoding them.
 

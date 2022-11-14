@@ -6,7 +6,6 @@ use Http\Client\HttpAsyncClient;
 use Http\Client\HttpClient;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use React\EventLoop\LoopInterface;
 use React\Http\Browser as ReactBrowser;
 
 /**
@@ -24,25 +23,12 @@ class Client implements HttpClient, HttpAsyncClient
     private $client;
 
     /**
-     * React event loop.
-     *
-     * @var LoopInterface
-     */
-    private $loop;
-
-    /**
      * Initialize the React client.
      */
     public function __construct(
-        LoopInterface $loop = null,
         ReactBrowser $client = null
     ) {
-        if (null !== $client && null === $loop) {
-            throw new \RuntimeException('You must give a LoopInterface instance with the Client');
-        }
-
-        $this->loop = $loop ?: ReactFactory::buildEventLoop();
-        $this->client = $client ?: ReactFactory::buildHttpClient($this->loop);
+        $this->client = $client ?: ReactFactory::buildHttpClient();
     }
 
     /**
