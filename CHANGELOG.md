@@ -8,12 +8,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+With this release the promise `wait` function will wait for requests to complete using
+[`react/async`'s `await`](https://reactphp.org/async/#await) utilizing fibers. Instead of constantly
+start stopping the event loop. As such users are expected to run usage of this adapter in a fiber using
+[`react/async`'s `async`](https://reactphp.org/async/#async) like:
+
+```php
+use function React\Async\async;
+
+async(static function () {
+    // Returns a Http\Promise\Promise
+    $promise = $adapter->sendAsyncRequest(request);
+
+    // Returns a Psr\Http\Message\ResponseInterface
+    $response = $promise->wait();
+})();
+```
+
 ### Changed
 
 - Use PHP 8.1 fibers as async mechanism.
 - Detect supported PHP versions in range during CI instead of hardcoding them.
-
-### Changed
 
 ## [3.0.1] - 2021-10-20
 
