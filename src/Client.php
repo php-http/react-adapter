@@ -26,7 +26,7 @@ class Client implements HttpClient, HttpAsyncClient
      * Initialize the React client.
      */
     public function __construct(
-        ReactBrowser $client = null
+        ?ReactBrowser $client = null
     ) {
         $this->client = $client ?: ReactFactory::buildHttpClient();
     }
