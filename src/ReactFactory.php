@@ -19,7 +19,7 @@ class ReactFactory
      *                                           behaviour
      */
     public static function buildHttpClient(
-        ConnectorInterface $connector = null
+        ?ConnectorInterface $connector = null
     ): Browser {
         return (new Browser($connector))
             ->withRejectErrorResponse(false)
